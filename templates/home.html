@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Парсер bash.im</title>
+</head>
+<body>
+
+<div>
+    <form action="/update/" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Обновить">
+    </form>
+</div>
+<hr>
+
+{% for post in posts %}
+
+    <div>
+    <p><strong>id: {{ post.bash_id }}</strong></p>
+    <p>{{ post.text }}</p>
+    </div>
+
+{% endfor %}
+
+</body>
+</html>
