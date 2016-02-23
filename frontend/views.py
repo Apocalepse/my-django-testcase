@@ -2,7 +2,7 @@
 import urllib2
 
 from django.views.generic import View, ListView
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from bs4 import BeautifulSoup
@@ -13,7 +13,7 @@ from .models import Post
 
 class UpdateBase(View):
     def get(self, request, *args, **kwargs):
-        pass
+        return HttpResponseRedirect(reverse('home'))
 
     def post(self, request, *args, **kwargs):
         url = 'http://bash.im'
@@ -25,6 +25,7 @@ class UpdateBase(View):
             text_div = select(div_quote, 'div.text')
             post_id = select(div_quote, 'div.actions a.id')
 
+            # Там есть какие-то фальшивые дивы, таким образом их пропускаем
             try:
                 post_id[0]
             except:
@@ -33,6 +34,7 @@ class UpdateBase(View):
             post_id = post_id[0].text.replace('#', '')
             post_text = text_div[0].text
 
+            # Проверяем есть ли уже такой пост
             try:
                 Post.objects.get(bash_id=post_id)
             except Post.DoesNotExist:
